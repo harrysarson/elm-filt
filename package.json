@@ -1,0 +1,50 @@
+{
+  "name": "y",
+  "version": "0.1.0",
+  "description": "Filter the output of the elm compiler",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "lint": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harrysarson/elm-filt.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harrysarson/elm-filt/issues"
+  },
+  "homepage": "https://github.com/harrysarson/elm-filt#readme",
+  "dependencies": {
+    "esm": "3.2.25",
+    "fs-extra": "8.1.0",
+    "log": "6.0.0",
+    "log-node": "7.0.0",
+    "meow": "5.0.0"
+  },
+  "devDependencies": {
+    "ava": "2.4.0",
+    "prettier": "1.18.2",
+    "xo": "0.25.3"
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ],
+    "files": [
+			"test/unit/**/*",
+			"test/integration/**/*"
+		]
+  },
+  "xo": {
+    "ignores": [
+      "examples"
+    ],
+    "prettier": true,
+    "rules": {
+      "ava/no-import-test-files": "off"
+    }
+  }
+}

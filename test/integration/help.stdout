@@ -1,0 +1,10 @@
+
+  Filter the output of the elm compiler
+
+  Usage
+    $ elm-filt <source> --keep <elm function>
+  Examples
+    $ elm-filt elm.js --keep Main.main --keep Main.update
+    TODO
+
+

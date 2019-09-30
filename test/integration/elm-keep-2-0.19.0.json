@@ -1,0 +1,4 @@
+{
+    "args": "examples/elm-0.19.0.js --keep Example.add --keep Example.main",
+    "code": 0
+}

@@ -1,0 +1,7 @@
+
+// For Example.add
+var author$project$Example$add = F2(
+	function (lhs, rhs) {
+		var sum = lhs + rhs;
+		return sum;
+	});

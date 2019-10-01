@@ -8,51 +8,51 @@
 
 ## Install
 
-  $ npm install --global elm-filt
+    $ npm install --global elm-filt
 
 ## Usage
 
-  $ elm-filt --help
+    $ elm-filt --help
 
-    Filter the output of the elm compiler
+      Filter the output of the elm compiler
 
-    Usage
-      $ elm-filt <source> --keep <elm specifier> [--keep <elm specifier>]...
+      Usage
+        $ elm-filt <source> --keep <elm specifier> [--keep <elm specifier>]...
 
-    Elm Specifiers
-      author/pkg:Module.name  Keep the elm function or variable called "name"
-                                in module "Module" in package installed using
-                                `elm install author/package`.
-      Module.name             Same as above for elm functions or variables
-                                defined within your project.
+      Elm Specifiers
+        author/pkg:Module.name  Keep the elm function or variable called "name"
+                                  in module "Module" in package installed using
+                                  `elm install author/package`.
+        Module.name             Same as above for elm functions or variables
+                                  defined within your project.
 
-    Options
-      --keep, -k              Elm functions to include in JavaScript output
-      --version, -v           Print version and quit
-      --help, -h              Display this information and quit
+      Options
+        --keep, -k              Elm functions to include in JavaScript output
+        --version, -v           Print version and quit
+        --help, -h              Display this information and quit
 
-    Examples
-      $ elm-filt elm.js --keep Main.main --keep Main.update
+      Examples
+        $ elm-filt elm.js --keep Main.main --keep Main.update
 
-        // For Main.main
-        var author$project$Main$main = elm$browser$Browser$document(
-          {
-            init: function (_n0) {
-              return author$project$State$initialState;
-            },
-            subscriptions: author$project$Main$subscriptions,
-            update: author$project$State$update,
-            view: author$project$Main$view
-          });
+          // For Main.main
+          var author$project$Main$main = elm$browser$Browser$document(
+            {
+              init: function (_n0) {
+                return author$project$State$initialState;
+              },
+              subscriptions: author$project$Main$subscriptions,
+              update: author$project$State$update,
+              view: author$project$Main$view
+            });
 
-        // For State.update
-        var author$project$State$update = F2(
-          function (msg, model) {
-            switch (msg.$) {
-              case 'Noop':
-                return GlobalWebIndex$cmd_extra$Cmd$Extra$pure(model);
-              case 'ChangeStage':
-                ...
+          // For State.update
+          var author$project$State$update = F2(
+            function (msg, model) {
+              switch (msg.$) {
+                case 'Noop':
+                  return GlobalWebIndex$cmd_extra$Cmd$Extra$pure(model);
+                case 'ChangeStage':
+                  ...
 
 ## Contributors
 

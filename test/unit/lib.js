@@ -14,6 +14,8 @@ import {
 } from '../../src/lib';
 import * as fixtures from '../helpers/fixtures';
 
+const skipTest = test.skip;
+
 test('isValidGithubUsername: valid usernames', t => {
 	for (const name of fixtures.usernames) {
 		t.assert(isValidGithubUsername(name));
@@ -282,7 +284,7 @@ test('trimElmJs: trims 0.19.0', async t => {
 	t.assert(!timmed.includes('_Platform_export'));
 });
 
-test.skip('trimElmJs: trims 0.19.1', async t => {
+skipTest('trimElmJs: trims 0.19.1', async t => {
 	const file = await fixtures.sources['0.19.1'];
 	const timmed = trimElmJs['0.19.1'](file.split('\n'));
 

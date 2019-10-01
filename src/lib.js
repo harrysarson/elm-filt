@@ -22,7 +22,6 @@ export class UnsupportedVersionError extends ElmFiltError {
 	}
 }
 
-
 export function detectElmVersion(source) {
 	const checks = {
 		'0.19.x': [
@@ -101,7 +100,7 @@ export const trimElmJs = {
 			);
 		}
 
-		if (!lines[lines.length-1].endsWith(endMatter)) {
+		if (!lines[lines.length - 1].endsWith(endMatter)) {
 			throw new ElmFiltError(
 				`The following end to the elm file is not valid:\n...\n${lines
 					.slice(-5)
@@ -110,7 +109,10 @@ export const trimElmJs = {
 		}
 
 		const trimmed = lines.slice(frontMatter.length);
-		trimmed[trimmed.length - 1] = trimmed[trimmed.length - 1].slice(0, -endMatter.length);
+		trimmed[trimmed.length - 1] = trimmed[trimmed.length - 1].slice(
+			0,
+			-endMatter.length
+		);
 		return trimmed;
 	}
 };
@@ -122,7 +124,9 @@ export const definitionsFromElmJs = {
 
 		for (let i = 1; i < lines.length; ++i) {
 			const isNewDefinition =
-				lines[i].startsWith('function') || lines[i].startsWith('var') || lines[i].startsWith('_Platform_export');
+				lines[i].startsWith('function') ||
+				lines[i].startsWith('var') ||
+				lines[i].startsWith('_Platform_export');
 
 			if (isNewDefinition) {
 				definitions.push(current.join('\n'));
@@ -290,9 +294,12 @@ function getDefinitionWithName(definitions, name) {
 	if (defs.length === 0) {
 		throw new ElmFiltError(`No definitions with name "${name}"`);
 	} else if (defs.length > 1) {
-		throw Object.assign(new ElmFiltError(`Multiple definitions with name "${name}"`), {
-			definitions: defs
-		});
+		throw Object.assign(
+			new ElmFiltError(`Multiple definitions with name "${name}"`),
+			{
+				definitions: defs
+			}
+		);
 	}
 
 	return defs[0];

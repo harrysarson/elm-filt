@@ -1,4 +1,4 @@
 {
-    "args": "--help",
+    "args": "-h",
     "code": 0
 }

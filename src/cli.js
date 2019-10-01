@@ -65,11 +65,15 @@ export async function main() {
 		});
 
 		if (cli.flags.version) {
-			meow.showVersion();
+			cli.showVersion();
 		}
 
 		if (cli.flags.help) {
-			meow.showHelp(0);
+			cli.showHelp(0);
+		}
+
+		if (cli.input.length === 0 && Object.keys(cli.flags).length === 0) {
+			cli.showHelp(2);
 		}
 
 		if (cli.input.length !== 1) {

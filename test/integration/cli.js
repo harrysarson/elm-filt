@@ -5,6 +5,7 @@ import fs from 'fs-extra';
 import test from 'ava';
 import entries from 'object.entries';
 import fromEntries from 'object.fromentries';
+import pkg from '../../package'
 
 const elmFilt = './bin/elm-filt';
 
@@ -38,9 +39,8 @@ const readFileOrEmpty = async (path, t) => {
 for (const testName of tests) {
 	const testPath = path.join(__dirname, testName);
 	const json = JSON.parse(fs.readFileSync(`${testPath}.json`));
-	const cliInvokation = `${elmFilt} ${json.args}`;
-	test(cliInvokation, async t => {
-		const program = exec(cliInvokation);
+	test(`elm-filt ${json.args}`, async t => {
+		const program = exec(`node ${elmFilt} ${json.args}`);
 		const {stderr, stdout, code = 0} = await (json.code === 0
 			? program
 			: t.throwsAsync(program));
@@ -53,3 +53,15 @@ for (const testName of tests) {
 		t.deepEqual(stdout, expected.stdout);
 	});
 }
+
+test('elm-filt --version', async t => {
+	const {stderr, stdout} = await exec(`node ${elmFilt} --version`);
+	t.deepEqual(stderr, '');
+	t.deepEqual(stdout, `${pkg.version}\n`);
+});
+
+test('elm-filt -v', async t => {
+	const {stderr, stdout} = await exec(`node ${elmFilt} -v`);
+	t.deepEqual(stderr, '');
+	t.deepEqual(stdout, `${pkg.version}\n`);
+});

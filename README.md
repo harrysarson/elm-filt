@@ -1,4 +1,6 @@
-# ![elm-filt](https://github.com/harrysarson/elm-filt/tree/master/assets/elm-filt.svg)
+# elm-filt
+
+![elm-filt](https://github.com/harrysarson/elm-filt/tree/master/assets/elm-filt.png)
 
 > Filter the output of the elm compiler
 

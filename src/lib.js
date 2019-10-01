@@ -1,3 +1,5 @@
+import flat from 'array.prototype.flat';
+
 export const supportedElmVersions = [
 	// '0.18.0',
 	'0.19.0',
@@ -75,9 +77,7 @@ export const filters = {
 		const definitions = definitionsFromElmJs['0.19.0'](trimmed);
 
 		return keeps.reduce((arr, keep) => {
-			const oldStyleKeep = parseDefinition(keep)
-				.flat()
-				.join('$');
+			const oldStyleKeep = flat(parseDefinition(keep)).join('$');
 			arr.push({
 				elmIdentifier: keep,
 				javascript: getDefinitionWithName(definitions, oldStyleKeep)

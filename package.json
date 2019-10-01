@@ -18,11 +18,14 @@
   },
   "homepage": "https://github.com/harrysarson/elm-filt#readme",
   "dependencies": {
+    "array.prototype.flat": "1.2.1",
     "esm": "3.2.25",
     "fs-extra": "8.1.0",
     "log": "6.0.0",
     "log-node": "7.0.0",
-    "meow": "5.0.0"
+    "meow": "5.0.0",
+    "object.entries": "1.1.0",
+    "object.fromentries": "2.0.0"
   },
   "devDependencies": {
     "ava": "2.4.0",
@@ -34,9 +37,9 @@
       "esm"
     ],
     "files": [
-			"test/unit/**/*",
-			"test/integration/**/*"
-		]
+      "test/unit/**/*",
+      "test/integration/**/*"
+    ]
   },
   "xo": {
     "ignores": [

@@ -3,6 +3,8 @@ import path from 'path';
 import childProcess from 'child_process';
 import fs from 'fs-extra';
 import test from 'ava';
+import entries from 'object.entries';
+import fromEntries from 'object.fromentries';
 
 const elmFilt = './bin/elm-filt';
 
@@ -14,9 +16,9 @@ const tests = fs
 	.map(file => file.slice(0, -5));
 
 const objectPromiseAll = async obj =>
-	Object.fromEntries(
+	fromEntries(
 		await Promise.all(
-			Object.entries(obj).map(async ([key, value]) => [key, await value])
+			entries(obj).map(async ([key, value]) => [key, await value])
 		)
 	);
 

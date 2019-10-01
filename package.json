@@ -1,11 +1,12 @@
 {
-  "name": "y",
+  "name": "elm-filt",
   "version": "0.0.0",
   "description": "Filter the output of the elm compiler",
   "main": "index.js",
   "engines": {
     "node": ">=8.16.1"
   },
+  "bin": "./bin/elm-filt",
   "scripts": {
     "test": "ava",
     "lint": "xo"

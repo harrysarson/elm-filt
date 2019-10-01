@@ -1,6 +1,6 @@
 {
   "name": "y",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Filter the output of the elm compiler",
   "main": "index.js",
   "engines": {
@@ -20,6 +20,10 @@
     "url": "https://github.com/harrysarson/elm-filt/issues"
   },
   "homepage": "https://github.com/harrysarson/elm-filt#readme",
+  "files": [
+    "/bin/",
+    "/src/"
+  ],
   "dependencies": {
     "array.prototype.flat": "1.2.1",
     "esm": "3.2.25",

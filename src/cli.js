@@ -3,7 +3,7 @@ import log from 'log';
 import logNode from 'log-node';
 
 import fs from 'fs-extra';
-import {detectElmVersion, filters, ElmFiltError} from './lib';
+import {detectElmVersion, filter, ElmFiltError} from './lib';
 
 export const helpText = `  Usage
     $ elm-filt <source> --keep <elm specifier> [--keep <elm specifier>]...
@@ -124,10 +124,10 @@ The following elm compiler versions are supported:${[
 			}
 		})();
 
-		const filtered = filters[version]({
+		const filtered = filter({
 			source,
-			packageName: 'author/project',
-			keeps: keep
+			keeps: keep,
+			assumeVersion: version
 		});
 
 		for (const {elmIdentifier, javascript} of filtered) {

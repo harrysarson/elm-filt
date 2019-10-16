@@ -1,17 +1,19 @@
 import test from 'ava';
 import {
+	detectElmVersion,
+	UnsupportedVersionError,
+	supportedElmVersions
+} from '../../src/lib';
+import {
+	ParseDefinitionError,
 	isValidGithubUsername,
 	isValidGithubRepo,
 	listInvalidElmParts,
 	commaList,
 	getElmParts,
 	parseDefinition,
-	ParseDefinitionError,
-	detectElmVersion,
-	UnsupportedVersionError,
-	supportedElmVersions,
 	trimElmJs
-} from '../../src/lib';
+} from '../../src/internal';
 import * as fixtures from '../helpers/fixtures';
 
 const skipTest = test.skip;
@@ -267,7 +269,10 @@ test('detectElmVersion: detect but throw error for 0.18.0', async t => {
 });
 
 test('detectElmVersion: throws error with `supportedVersion` property if file is invalid', async t => {
-	const files = [await fixtures.sources['0.18.0'], await fixtures.sources.text];
+	const files = await Promise.all([
+		fixtures.sources['0.18.0'],
+		fixtures.sources.text
+	]);
 	for (const file of files) {
 		const e = t.throws(() => detectElmVersion(file));
 		t.deepEqual(e.supportedElmVersions, supportedElmVersions);

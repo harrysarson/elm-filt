@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import test from 'ava';
 import entries from 'object.entries';
 import fromEntries from 'object.fromentries';
-import pkg from '../../package'
+import pkg from '../../package.json';
 
 const elmFilt = './bin/elm-filt';
 
@@ -56,12 +56,12 @@ for (const testName of tests) {
 
 test('elm-filt --version', async t => {
 	const {stderr, stdout} = await exec(`node ${elmFilt} --version`);
-	t.deepEqual(stderr, '');
-	t.deepEqual(stdout, `${pkg.version}\n`);
+	t.is(stderr, '');
+	t.is(stdout, `${pkg.version}\n`);
 });
 
 test('elm-filt -v', async t => {
 	const {stderr, stdout} = await exec(`node ${elmFilt} -v`);
-	t.deepEqual(stderr, '');
-	t.deepEqual(stdout, `${pkg.version}\n`);
+	t.is(stderr, '');
+	t.is(stdout, `${pkg.version}\n`);
 });

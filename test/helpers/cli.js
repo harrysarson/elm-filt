@@ -10,11 +10,27 @@ const exec = util.promisify(childProcess.exec);
 
 export function execTest(argString, func) {
 	test(`elm-filt ${argString}`, t => {
-		func(t, exec(`node ${elmFilt} ${argString}`));
-	});
+        function processSnapshot({stderr, stdout}) {
+            t.snapshot(`elm-filt ${argString}`, {id: `Invocation`});
+            t.snapshot(stderr, {id: `Stderr`});
+            t.snapshot(stdout, {id: `Stdout`});
+        }
+
+        return func(t, exec(`node ${elmFilt} ${argString}`), processSnapshot)
+    });
 }
 
-export function processSnapshot(t, {stderr, stdout}) {
-	t.snapshot(stderr, {id: `stderr`});
-	t.snapshot(stdout, {id: `stdout`});
-}
+
+// export function exec(t, argString, runProcess) {
+//     return runProcess(t, exec(`node ${elmFilt} ${argString}`));
+// }
+
+// exec.title = (providedTitle = '', argString) => `${providedTitle} elm-filt ${argString}`.trim();
+
+// export function execSnapshot(t, argString, runProcess) {
+//     const { stdout, stdin } = runProcess(t, exec(`node ${elmFilt} ${argString}`));
+// 	t.snapshot(stderr, {id: `stderr`});
+//     t.snapshot(stdout, {id: `stdout`});
+// }
+
+// execTest.title = (providedTitle = '', argString) => `${providedTitle} elm-filt ${argString}`.trim();

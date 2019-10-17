@@ -1,5 +1,5 @@
-import {execTest, processSnapshot} from '../helpers/cli';
+import {execTest} from '../helpers/cli';
 
-execTest('', async (t, program) => {
-	processSnapshot(t, await t.throwsAsync(program));
+execTest('', async (t, program, processSnapshot) => {
+	processSnapshot(await t.throwsAsync(program));
 });

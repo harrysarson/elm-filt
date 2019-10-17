@@ -130,6 +130,19 @@ The following elm compiler versions are supported:${[
 			assumeVersion: version
 		});
 
+		process.stdout.write(`/* elm-filt ${meow.version}
+ * Source:      ${source}.
+ * Type:		JavaScript
+ * Compiler:    Offical elm compiler <https://github.com/elm/compiler>
+ * Version:		${version}
+ *
+ * The following elm specifiers have been kept:
+ *
+${keep.map(k => ` * * \`${k}\``).join('\n')}
+ */
+
+`);
+
 		for (const {elmIdentifier, javascript} of filtered) {
 			process.stdout.write(`
 // For ${elmIdentifier}

@@ -13,3 +13,8 @@ export function execTest(argString, func) {
 		func(t, exec(`node ${elmFilt} ${argString}`));
 	});
 }
+
+export function processSnapshot(t, {stderr, stdout}) {
+	t.snapshot(stderr, {id: `stderr`});
+	t.snapshot(stdout, {id: `stdout`});
+}

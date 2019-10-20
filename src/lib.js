@@ -1,4 +1,3 @@
-import flat from 'array.prototype.flat';
 import {
 	getDefinitionWithName,
 	parseDefinition,
@@ -70,9 +69,9 @@ export function filter({source, keeps, assumeElmVersion}) {
 	const lines = source.split('\n').filter(line => line !== '');
 	const trimmed = trimElmJs[elmVersion](lines);
 	const definitions = definitionsFromElmJs[elmVersion](trimmed);
-
 	return keeps.reduce((arr, keep) => {
-		const oldStyleKeep = flat(parseDefinition(keep)).join('$');
+		const {author, pkg, elmParts} = parseDefinition(keep);
+		const oldStyleKeep = [author, pkg, ...elmParts].join('$');
 		arr.push({
 			elmIdentifier: keep,
 			javascript: getDefinitionWithName(definitions, oldStyleKeep)

@@ -9,7 +9,8 @@
   "bin": "./bin/elm-filt",
   "scripts": {
     "test": "ava",
-    "lint": "xo"
+    "lint": "xo",
+    "tidy": "xo --fix && ava --updateSnapshots"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,6 @@
     "/src/"
   ],
   "dependencies": {
-    "array.prototype.flat": "1.2.1",
     "esm": "3.2.25",
     "fs-extra": "8.1.0",
     "log": "6.0.0",

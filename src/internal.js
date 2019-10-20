@@ -99,10 +99,14 @@ export function parseDefinition(input) {
 					);
 				}
 
-				return [author, pkg, getElmParts(parts[1])];
+				return {author, pkg, elmParts: getElmParts(parts[1])};
 		  })()
 		: (() => {
-				return ['author', 'project', getElmParts(parts[0])];
+				return {
+					author: 'author',
+					pkg: 'project',
+					elmParts: getElmParts(parts[0])
+				};
 		  })();
 }
 

@@ -1,19 +1,19 @@
 import test from 'ava';
 import {
-	detectElmVersion,
-	UnsupportedVersionError,
-	supportedElmVersions
-} from '../../src/lib';
-import {
-	ParseDefinitionError,
-	isValidGithubUsername,
-	isValidGithubRepo,
-	listInvalidElmParts,
 	commaList,
 	getElmParts,
+	isValidGithubRepo,
+	isValidGithubUsername,
+	listInvalidElmParts,
 	parseDefinition,
+	ParseDefinitionError,
 	trimElmJs
 } from '../../src/internal';
+import {
+	detectElmVersion,
+	supportedElmVersions,
+	UnsupportedVersionError
+} from '../../src/lib';
 import * as fixtures from '../helpers/fixtures';
 
 const skipTest = test.skip;
@@ -161,44 +161,44 @@ test('getElmParts: bad parts', t => {
 });
 
 test('parseDefinition: valid definition without author/project', t => {
-	t.deepEqual(parseDefinition('Module.main'), [
-		'author',
-		'project',
-		['Module', 'main']
-	]);
-	t.deepEqual(parseDefinition('A.B.C.D'), [
-		'author',
-		'project',
-		['A', 'B', 'C', 'D']
-	]);
-	t.deepEqual(parseDefinition('H7.I8.hi2'), [
-		'author',
-		'project',
-		['H7', 'I8', 'hi2']
-	]);
+	t.deepEqual(parseDefinition('Module.main'), {
+		author: 'author',
+		pkg: 'project',
+		elmParts: ['Module', 'main']
+	});
+	t.deepEqual(parseDefinition('A.B.C.D'), {
+		author: 'author',
+		pkg: 'project',
+		elmParts: ['A', 'B', 'C', 'D']
+	});
+	t.deepEqual(parseDefinition('H7.I8.hi2'), {
+		author: 'author',
+		pkg: 'project',
+		elmParts: ['H7', 'I8', 'hi2']
+	});
 });
 
 test('parseDefinition: valid definition with valid author/project', t => {
-	t.deepEqual(parseDefinition('author/project:Module.main'), [
-		'author',
-		'project',
-		['Module', 'main']
-	]);
-	t.deepEqual(parseDefinition('elm/core:A.B.C.D'), [
-		'elm',
-		'core',
-		['A', 'B', 'C', 'D']
-	]);
-	t.deepEqual(parseDefinition('bob/marley:H7.I8.hi2'), [
-		'bob',
-		'marley',
-		['H7', 'I8', 'hi2']
-	]);
-	t.deepEqual(parseDefinition('bo-b/mar.le-y:H7.I8.hi2'), [
-		'bo-b',
-		'mar.le-y',
-		['H7', 'I8', 'hi2']
-	]);
+	t.deepEqual(parseDefinition('author/project:Module.main'), {
+		author: 'author',
+		pkg: 'project',
+		elmParts: ['Module', 'main']
+	});
+	t.deepEqual(parseDefinition('elm/core:A.B.C.D'), {
+		author: 'elm',
+		pkg: 'core',
+		elmParts: ['A', 'B', 'C', 'D']
+	});
+	t.deepEqual(parseDefinition('bob/marley:H7.I8.hi2'), {
+		author: 'bob',
+		pkg: 'marley',
+		elmParts: ['H7', 'I8', 'hi2']
+	});
+	t.deepEqual(parseDefinition('bo-b/mar.le-y:H7.I8.hi2'), {
+		author: 'bo-b',
+		pkg: 'mar.le-y',
+		elmParts: ['H7', 'I8', 'hi2']
+	});
 });
 
 test('parseDefinition: bad definition without author/project', t => {
@@ -210,7 +210,7 @@ test('parseDefinition: bad definition without author/project', t => {
 
 test('parseDefinition: bad definition with valid author/project', t => {
 	t.throws(
-		() => parseDefinition('author/project:module.main'),
+		() => parseDefinition('author/pkg:module.main'),
 		ParseDefinitionError
 	);
 	t.throws(() => parseDefinition('elm/core:A.B.C.5D'), ParseDefinitionError);
@@ -226,7 +226,7 @@ test('parseDefinition: bad definition with valid author/project', t => {
 
 test('parseDefinition: bad definition with bad author/project', t => {
 	t.throws(
-		() => parseDefinition('au--thor/project:module.main'),
+		() => parseDefinition('au--thor/pkg:module.main'),
 		ParseDefinitionError
 	);
 	t.throws(() => parseDefinition('elm/co&re:A.B.C.5D'), ParseDefinitionError);
@@ -239,7 +239,7 @@ test('parseDefinition: bad definition with bad author/project', t => {
 
 test('parseDefinition: valid definition with bad author/project', t => {
 	t.throws(
-		() => parseDefinition('au--thor/project:Module.main'),
+		() => parseDefinition('au--thor/pkg:Module.main'),
 		ParseDefinitionError
 	);
 	t.throws(() => parseDefinition('elm/co&re:A.B.C.D'), ParseDefinitionError);

@@ -148,6 +148,28 @@ test("jsFromSpecifier['0.19.0']: basic example", t => {
 	);
 });
 
+test("jsFromSpecifier['0.19.0']: hyphen in author", t => {
+	t.is(
+		jsFromSpecifier['0.19.0']({
+			author: 'elm-explorations',
+			pkg: 'test',
+			elmParts: ['Test', 'test']
+		}),
+		'elm_explorations$test$Test$test'
+	);
+});
+
+test("jsFromSpecifier['0.19.0']: hyphen in package", t => {
+	t.is(
+		jsFromSpecifier['0.19.0']({
+			author: 'harrysarson',
+			pkg: 'elm-complex',
+			elmParts: ['Complex', 'add']
+		}),
+		'harrysarson$elm_complex$Complex$add'
+	);
+});
+
 test('getElmParts: valid elm identifier', t => {
 	const inputs = [
 		['Module.main', ['Module', 'main']],

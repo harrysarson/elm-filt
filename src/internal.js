@@ -89,7 +89,8 @@ export function commaList(list) {
 }
 
 export const jsFromSpecifier = {
-	'0.19.0': ({author, pkg, elmParts}) => [author, pkg, ...elmParts].join('$')
+	'0.19.0': ({author, pkg, elmParts}) =>
+		[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join('$')
 };
 
 export function parseSpecifier(input) {

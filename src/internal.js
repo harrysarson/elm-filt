@@ -17,6 +17,14 @@ export class UnsupportedVersionError extends ElmFiltError {
 	}
 }
 
+export class ElmDefinition {
+	constructor({ author, pkg, elmParts }) {
+		this.author = author;
+		this.pkg = pkg;
+		this.elmParts = elmParts;
+	}
+}
+
 export const trimElmJs = {
 	'0.19.0': lines => {
 		const frontMatter = ['(function(scope){', "'use strict';"];
@@ -99,14 +107,14 @@ export function parseDefinition(input) {
 					);
 				}
 
-				return {author, pkg, elmParts: getElmParts(parts[1])};
+				return new ElmDefinition({author, pkg, elmParts: getElmParts(parts[1])});
 		  })()
 		: (() => {
-				return {
+				return new ElmDefinition({
 					author: 'author',
 					pkg: 'project',
 					elmParts: getElmParts(parts[0])
-				};
+				});
 		  })();
 }
 

@@ -10,18 +10,17 @@ const exec = util.promisify(childProcess.exec);
 
 export function execTest(argString, func) {
 	test(`elm-filt ${argString}`, t => {
-        function processSnapshot({stderr, stdout}) {
-            t.snapshot(`elm-filt ${argString}`, {id: `Invocation`});
-            t.snapshot(stderr, {id: `Stderr`});
-            t.snapshot(stdout, {id: `Stdout`});
-        }
+		function processSnapshot({stderr, stdout}) {
+			t.snapshot(`elm-filt ${argString}`, {id: `Invocation`});
+			t.snapshot(stderr, {id: `Stderr`});
+			t.snapshot(stdout, {id: `Stdout`});
+		}
 
-        return func(t, exec(`node ${elmFilt} ${argString}`), processSnapshot)
-    });
+		return func(t, exec(`node ${elmFilt} ${argString}`), processSnapshot);
+	});
 }
 
-
-// export function exec(t, argString, runProcess) {
+// Export function exec(t, argString, runProcess) {
 //     return runProcess(t, exec(`node ${elmFilt} ${argString}`));
 // }
 

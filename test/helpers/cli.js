@@ -1,35 +1,20 @@
-/* eslint-disable ava/no-ignored-test-files */
-
 import childProcess from 'child_process';
 import util from 'util';
-import test from 'ava';
 
 const elmFilt = './bin/elm-filt';
+const execCmd = util.promisify(childProcess.exec);
 
-const exec = util.promisify(childProcess.exec);
+export async function exec(t, argString, func) {
+	const {snapshot} = await func(t, execCmd(`node ${elmFilt} ${argString}`));
 
-export function execTest(argString, func) {
-	test(`elm-filt ${argString}`, t => {
-		function processSnapshot({stderr, stdout}) {
-			t.snapshot(`elm-filt ${argString}`, {id: `Invocation`});
-			t.snapshot(stderr, {id: `Stderr`});
-			t.snapshot(stdout, {id: `Stdout`});
-		}
-
-		return func(t, exec(`node ${elmFilt} ${argString}`), processSnapshot);
-	});
+	if (snapshot !== undefined) {
+		t.snapshot(`elm-filt ${argString}`, {id: `Invocation`});
+		t.snapshot(snapshot.stderr, {id: `Stderr`});
+		t.snapshot(snapshot.stdout, {id: `Stdout`});
+	}
 }
 
-// Export function exec(t, argString, runProcess) {
-//     return runProcess(t, exec(`node ${elmFilt} ${argString}`));
-// }
-
-// exec.title = (providedTitle = '', argString) => `${providedTitle} elm-filt ${argString}`.trim();
-
-// export function execSnapshot(t, argString, runProcess) {
-//     const { stdout, stdin } = runProcess(t, exec(`node ${elmFilt} ${argString}`));
-// 	t.snapshot(stderr, {id: `stderr`});
-//     t.snapshot(stdout, {id: `stdout`});
-// }
-
-// execTest.title = (providedTitle = '', argString) => `${providedTitle} elm-filt ${argString}`.trim();
+exec.title = (providedTitle, argString) =>
+	`${
+		providedTitle === undefined ? '' : `${providedTitle}:`
+	} elm-filt ${argString}`.trim();

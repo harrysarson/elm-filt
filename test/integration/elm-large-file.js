@@ -1,8 +1,10 @@
-import {execTest} from '../helpers/cli';
+import test from 'ava';
+import {exec} from '../helpers/cli';
 
-execTest(
+test(
+	exec,
 	'examples/elm-large-file.js --keep Main.main',
-	async (t, program, processSnapshot) => {
-		processSnapshot(await program);
+	async (t, program) => {
+		return {snapshot: await program};
 	}
 );

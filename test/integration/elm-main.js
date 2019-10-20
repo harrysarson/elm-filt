@@ -1,8 +1,6 @@
-import {execTest} from '../helpers/cli';
+import test from 'ava';
+import {exec} from '../helpers/cli';
 
-execTest(
-	'examples/elm-Main.js --keep Main.main',
-	async (t, program, processSnapshot) => {
-		processSnapshot(await program);
-	}
-);
+test(exec, 'examples/elm-Main.js --keep Main.main', async (t, program) => {
+	return {snapshot: await program};
+});

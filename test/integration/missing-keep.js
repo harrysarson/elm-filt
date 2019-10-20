@@ -1,5 +1,6 @@
-import {execTest} from '../helpers/cli';
+import test from 'ava';
+import {exec} from '../helpers/cli';
 
-execTest('examples/elm-0.19.0', async (t, program, processSnapshot) => {
-	processSnapshot(await t.throwsAsync(program));
+test(exec, 'examples/elm-0.19.0', async (t, program) => {
+	return {snapshot: await t.throwsAsync(program)};
 });

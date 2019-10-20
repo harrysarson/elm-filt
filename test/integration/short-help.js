@@ -1,5 +1,6 @@
-import {execTest} from '../helpers/cli';
+import test from 'ava';
+import {exec} from '../helpers/cli';
 
-execTest('-h', async (t, program, processSnapshot) => {
-	processSnapshot(await program);
+test(exec, '-h', async (t, program) => {
+	return {snapshot: await program};
 });

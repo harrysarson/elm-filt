@@ -1,14 +1,17 @@
+import test from 'ava';
 import pkg from '../../package.json';
-import {execTest} from '../helpers/cli';
+import {exec} from '../helpers/cli';
 
-execTest('--version', async (t, program) => {
+test(exec, '--version', async (t, program) => {
 	const {stderr, stdout} = await program;
 	t.is(stderr, '');
 	t.is(stdout, `${pkg.version}\n`);
+	return {};
 });
 
-execTest('-v', async (t, program) => {
+test(exec, '-v', async (t, program) => {
 	const {stderr, stdout} = await program;
 	t.is(stderr, '');
 	t.is(stdout, `${pkg.version}\n`);
+	return {};
 });

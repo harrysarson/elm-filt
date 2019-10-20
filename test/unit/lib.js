@@ -5,9 +5,10 @@ import {
 	isValidGithubRepo,
 	isValidGithubUsername,
 	listInvalidElmParts,
-	parseDefinition,
-	ParseDefinitionError,
-	trimElmJs
+	parseSpecifier,
+	ParseSpecifierError,
+	trimElmJs,
+	ElmSpecifier
 } from '../../src/internal';
 import {
 	detectElmVersion,
@@ -150,103 +151,118 @@ test('getElmParts: valid elm identifier', t => {
 });
 
 test('getElmParts: only one part', t => {
-	t.throws(() => getElmParts('main'), ParseDefinitionError);
+	t.throws(() => getElmParts('main'), ParseSpecifierError);
 });
 
 test('getElmParts: bad parts', t => {
-	t.throws(() => getElmParts('ma4.main'), ParseDefinitionError);
-	t.throws(() => getElmParts('4afsf.main'), ParseDefinitionError);
-	t.throws(() => getElmParts('Ma4.4'), ParseDefinitionError);
-	t.throws(() => getElmParts('Ma4.5.d4'), ParseDefinitionError);
+	t.throws(() => getElmParts('ma4.main'), ParseSpecifierError);
+	t.throws(() => getElmParts('4afsf.main'), ParseSpecifierError);
+	t.throws(() => getElmParts('Ma4.4'), ParseSpecifierError);
+	t.throws(() => getElmParts('Ma4.5.d4'), ParseSpecifierError);
 });
 
-test('parseDefinition: valid definition without author/project', t => {
-	t.deepEqual(parseDefinition('Module.main'), {
-		author: 'author',
-		pkg: 'project',
-		elmParts: ['Module', 'main']
-	});
-	t.deepEqual(parseDefinition('A.B.C.D'), {
-		author: 'author',
-		pkg: 'project',
-		elmParts: ['A', 'B', 'C', 'D']
-	});
-	t.deepEqual(parseDefinition('H7.I8.hi2'), {
-		author: 'author',
-		pkg: 'project',
-		elmParts: ['H7', 'I8', 'hi2']
-	});
-});
-
-test('parseDefinition: valid definition with valid author/project', t => {
-	t.deepEqual(parseDefinition('author/project:Module.main'), {
-		author: 'author',
-		pkg: 'project',
-		elmParts: ['Module', 'main']
-	});
-	t.deepEqual(parseDefinition('elm/core:A.B.C.D'), {
-		author: 'elm',
-		pkg: 'core',
-		elmParts: ['A', 'B', 'C', 'D']
-	});
-	t.deepEqual(parseDefinition('bob/marley:H7.I8.hi2'), {
-		author: 'bob',
-		pkg: 'marley',
-		elmParts: ['H7', 'I8', 'hi2']
-	});
-	t.deepEqual(parseDefinition('bo-b/mar.le-y:H7.I8.hi2'), {
-		author: 'bo-b',
-		pkg: 'mar.le-y',
-		elmParts: ['H7', 'I8', 'hi2']
-	});
-});
-
-test('parseDefinition: bad definition without author/project', t => {
-	t.throws(() => parseDefinition('ma4.main'), ParseDefinitionError);
-	t.throws(() => parseDefinition('4afsf.main'), ParseDefinitionError);
-	t.throws(() => parseDefinition('Ma4.4'), ParseDefinitionError);
-	t.throws(() => parseDefinition('Ma4.5.d4'), ParseDefinitionError);
-});
-
-test('parseDefinition: bad definition with valid author/project', t => {
-	t.throws(
-		() => parseDefinition('author/pkg:module.main'),
-		ParseDefinitionError
+test('parseSpecifier: valid specifier without author/project', t => {
+	t.deepEqual(
+		parseSpecifier('Module.main'),
+		new ElmSpecifier({
+			author: 'author',
+			pkg: 'project',
+			elmParts: ['Module', 'main']
+		})
 	);
-	t.throws(() => parseDefinition('elm/core:A.B.C.5D'), ParseDefinitionError);
-	t.throws(
-		() => parseDefinition('bob/marley:H7.iI8.hi2'),
-		ParseDefinitionError
+	t.deepEqual(
+		parseSpecifier('A.B.C.D'),
+		new ElmSpecifier({
+			author: 'author',
+			pkg: 'project',
+			elmParts: ['A', 'B', 'C', 'D']
+		})
 	);
-	t.throws(
-		() => parseDefinition('bo-b/mar.le-y:H7.6I8.hi2'),
-		ParseDefinitionError
+	t.deepEqual(
+		parseSpecifier('H7.I8.hi2'),
+		new ElmSpecifier({
+			author: 'author',
+			pkg: 'project',
+			elmParts: ['H7', 'I8', 'hi2']
+		})
 	);
 });
 
-test('parseDefinition: bad definition with bad author/project', t => {
-	t.throws(
-		() => parseDefinition('au--thor/pkg:module.main'),
-		ParseDefinitionError
+test('parseSpecifier: valid specifier with valid author/project', t => {
+	t.deepEqual(
+		parseSpecifier('author/project:Module.main'),
+		new ElmSpecifier({
+			author: 'author',
+			pkg: 'project',
+			elmParts: ['Module', 'main']
+		})
 	);
-	t.throws(() => parseDefinition('elm/co&re:A.B.C.5D'), ParseDefinitionError);
-	t.throws(() => parseDefinition('bob/:H7.iI8.hi2'), ParseDefinitionError);
-	t.throws(
-		() => parseDefinition('bob-/mar.le-y:H7.6I8.hi2'),
-		ParseDefinitionError
+	t.deepEqual(
+		parseSpecifier('elm/core:A.B.C.D'),
+		new ElmSpecifier({
+			author: 'elm',
+			pkg: 'core',
+			elmParts: ['A', 'B', 'C', 'D']
+		})
+	);
+	t.deepEqual(
+		parseSpecifier('bob/marley:H7.I8.hi2'),
+		new ElmSpecifier({
+			author: 'bob',
+			pkg: 'marley',
+			elmParts: ['H7', 'I8', 'hi2']
+		})
+	);
+	t.deepEqual(
+		parseSpecifier('bo-b/mar.le-y:H7.I8.hi2'),
+		new ElmSpecifier({
+			author: 'bo-b',
+			pkg: 'mar.le-y',
+			elmParts: ['H7', 'I8', 'hi2']
+		})
 	);
 });
 
-test('parseDefinition: valid definition with bad author/project', t => {
+test('parseSpecifier: bad specifier without author/project', t => {
+	t.throws(() => parseSpecifier('ma4.main'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('4afsf.main'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('Ma4.4'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('Ma4.5.d4'), ParseSpecifierError);
+});
+
+test('parseSpecifier: bad specifier with valid author/project', t => {
+	t.throws(() => parseSpecifier('author/pkg:module.main'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('elm/core:A.B.C.5D'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('bob/marley:H7.iI8.hi2'), ParseSpecifierError);
 	t.throws(
-		() => parseDefinition('au--thor/pkg:Module.main'),
-		ParseDefinitionError
+		() => parseSpecifier('bo-b/mar.le-y:H7.6I8.hi2'),
+		ParseSpecifierError
 	);
-	t.throws(() => parseDefinition('elm/co&re:A.B.C.D'), ParseDefinitionError);
-	t.throws(() => parseDefinition('bob/:H7.I8.hi2'), ParseDefinitionError);
+});
+
+test('parseSpecifier: bad specifier with bad author/project', t => {
 	t.throws(
-		() => parseDefinition('bob-/mar.le-y:H7.I8.hi2'),
-		ParseDefinitionError
+		() => parseSpecifier('au--thor/pkg:module.main'),
+		ParseSpecifierError
+	);
+	t.throws(() => parseSpecifier('elm/co&re:A.B.C.5D'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('bob/:H7.iI8.hi2'), ParseSpecifierError);
+	t.throws(
+		() => parseSpecifier('bob-/mar.le-y:H7.6I8.hi2'),
+		ParseSpecifierError
+	);
+});
+
+test('parseSpecifier: valid specifier with bad author/project', t => {
+	t.throws(
+		() => parseSpecifier('au--thor/pkg:Module.main'),
+		ParseSpecifierError
+	);
+	t.throws(() => parseSpecifier('elm/co&re:A.B.C.D'), ParseSpecifierError);
+	t.throws(() => parseSpecifier('bob/:H7.I8.hi2'), ParseSpecifierError);
+	t.throws(
+		() => parseSpecifier('bob-/mar.le-y:H7.I8.hi2'),
+		ParseSpecifierError
 	);
 });
 

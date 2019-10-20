@@ -5,7 +5,7 @@ export class ElmFiltError extends Error {
 	}
 }
 
-export class ParseDefinitionError extends ElmFiltError {
+export class ParseSpecifierError extends ElmFiltError {
 	constructor(...args) {
 		super(args);
 	}
@@ -17,8 +17,8 @@ export class UnsupportedVersionError extends ElmFiltError {
 	}
 }
 
-export class ElmDefinition {
-	constructor({ author, pkg, elmParts }) {
+export class ElmSpecifier {
+	constructor({author, pkg, elmParts}) {
 		this.author = author;
 		this.pkg = pkg;
 		this.elmParts = elmParts;
@@ -88,7 +88,7 @@ export function commaList(list) {
 	return `${list.slice(0, -1).join(', ')} and ${last}`;
 }
 
-export function parseDefinition(input) {
+export function parseSpecifier(input) {
 	const parts = input.split(':', 2);
 	return parts.length > 1
 		? (() => {
@@ -96,21 +96,21 @@ export function parseDefinition(input) {
 				const author = authorPackageParts[0];
 				const pkg = authorPackageParts[1];
 				if (!isValidGithubUsername(author)) {
-					throw new ParseDefinitionError(
-						`The author specified in the definition "${input}" is "${author}" which is not valid.`
+					throw new ParseSpecifierError(
+						`The author specified in the specifier "${input}" is "${author}" which is not valid.`
 					);
 				}
 
 				if (!isValidGithubRepo(pkg)) {
-					throw new ParseDefinitionError(
-						`The pkg specified in the definition "${input}" is "${pkg}" which is not valid.`
+					throw new ParseSpecifierError(
+						`The pkg specified in the specifier "${input}" is "${pkg}" which is not valid.`
 					);
 				}
 
-				return new ElmDefinition({author, pkg, elmParts: getElmParts(parts[1])});
+				return new ElmSpecifier({author, pkg, elmParts: getElmParts(parts[1])});
 		  })()
 		: (() => {
-				return new ElmDefinition({
+				return new ElmSpecifier({
 					author: 'author',
 					pkg: 'project',
 					elmParts: getElmParts(parts[0])
@@ -121,15 +121,15 @@ export function parseDefinition(input) {
 export function getElmParts(string) {
 	const elmParts = string.split('.');
 	if (elmParts.length === 1) {
-		throw new ParseDefinitionError(
-			`The elm definition ("${string}") requires atleast one Module name folowed by a full stop and a value.`
+		throw new ParseSpecifierError(
+			`The elm specifier ("${string}") requires atleast one Module name folowed by a full stop and a value.`
 		);
 	}
 
 	const invalidParts = listInvalidElmParts(elmParts);
 	if (invalidParts.length > 0) {
-		throw new ParseDefinitionError(
-			`The elm definition "${string}" is not valid ${
+		throw new ParseSpecifierError(
+			`The elm specifier "${string}" is not valid ${
 				elmParts.length > 1
 					? `(specifically ${commaList(
 							invalidParts.map(index => `"${elmParts[index]}"`)

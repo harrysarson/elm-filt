@@ -54,6 +54,20 @@
                 case 'ChangeStage':
                   ...
 
+
+## Terminology
+
+### Elm specifiers
+
+As described by `elm-filt --help`, an elm specifier is a string that uniquely describes an elm function or variable in some elm module.
+An elm specifier takes the form `[author/package:]Module1[. ...[ModuleN]].functionOrVariableName`.
+If `[author/package:]` is omitted, the elm specifier refers to an elm function or variable in the current application.
+There must be at least one module name and each should be followed by a dot, the package specifier is separated from the first module name by a colon.
+
+> Examples of elm specifiers include `elm/core:String.fromFloat`, `Main.main` and `mdgriffith/elm-ui:Element.text`.
+>
+> For elm functions and variables in the current application, the elm compiler will generate JavaScript as if they function or variable was in a package called `author/project`.
+
 ## Contributors
 
 | [![Harry Sarson](https://github.com/harrysarson.png?size=130)](https://github.com/harrysarson)  |

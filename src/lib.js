@@ -1,6 +1,6 @@
 import {
 	getDefinitionWithName,
-	parseDefinition,
+	parseSpecifier,
 	trimElmJs,
 	definitionsFromElmJs,
 	ElmFiltError,
@@ -70,7 +70,7 @@ export function filter({source, keeps, assumeElmVersion}) {
 	const trimmed = trimElmJs[elmVersion](lines);
 	const definitions = definitionsFromElmJs[elmVersion](trimmed);
 	return keeps.reduce((arr, keep) => {
-		const {author, pkg, elmParts} = parseDefinition(keep);
+		const {author, pkg, elmParts} = parseSpecifier(keep);
 		const oldStyleKeep = [author, pkg, ...elmParts].join('$');
 		arr.push({
 			elmIdentifier: keep,

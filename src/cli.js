@@ -130,7 +130,7 @@ The following elm compiler versions are supported:${[
 			assumeVersion: version
 		});
 
-		process.stdout.write(`/* elm-filt ${meow.version}
+		process.stdout.write(`/* elm-filt ${cli.pkg.version}
  * File:        ${input}.
  * Type:		JavaScript
  * Compiler:    Offical elm compiler <https://github.com/elm/compiler>

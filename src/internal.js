@@ -88,6 +88,10 @@ export function commaList(list) {
 	return `${list.slice(0, -1).join(', ')} and ${last}`;
 }
 
+export const jsFromSpecifier = {
+	'0.19.0': ({author, pkg, elmParts}) => [author, pkg, ...elmParts].join('$')
+};
+
 export function parseSpecifier(input) {
 	const parts = input.split(':', 2);
 	return parts.length > 1

@@ -4,7 +4,8 @@ import {
 	trimElmJs,
 	definitionsFromElmJs,
 	ElmFiltError,
-	UnsupportedVersionError
+	UnsupportedVersionError,
+	jsFromSpecifier
 } from './internal';
 
 export {ElmFiltError, UnsupportedVersionError} from './internal';
@@ -70,11 +71,11 @@ export function filter({source, keeps, assumeElmVersion}) {
 	const trimmed = trimElmJs[elmVersion](lines);
 	const definitions = definitionsFromElmJs[elmVersion](trimmed);
 	return keeps.reduce((arr, keep) => {
-		const {author, pkg, elmParts} = parseSpecifier(keep);
-		const oldStyleKeep = [author, pkg, ...elmParts].join('$');
+		const specifier = parseSpecifier(keep);
+		const jsKeep = jsFromSpecifier[elmVersion](specifier);
 		arr.push({
 			elmIdentifier: keep,
-			javascript: getDefinitionWithName(definitions, oldStyleKeep)
+			javascript: getDefinitionWithName(definitions, jsKeep)
 		});
 		return arr;
 	}, []);

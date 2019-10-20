@@ -8,7 +8,8 @@ import {
 	parseSpecifier,
 	ParseSpecifierError,
 	trimElmJs,
-	ElmSpecifier
+	ElmSpecifier,
+	jsFromSpecifier
 } from '../../src/internal';
 import {
 	detectElmVersion,
@@ -134,6 +135,17 @@ test('commaList: no itema', t => {
 
 test('commaList: one item', t => {
 	t.is(commaList([0]), '0');
+});
+
+test("jsFromSpecifier['0.19.0']: basic example", t => {
+	t.is(
+		jsFromSpecifier['0.19.0']({
+			author: 'david',
+			pkg: 'weapons',
+			elmParts: ['Sling', 'stone']
+		}),
+		'david$weapons$Sling$stone'
+	);
 });
 
 test('getElmParts: valid elm identifier', t => {

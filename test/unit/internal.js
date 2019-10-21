@@ -135,36 +135,42 @@ test('commaList: one item', t => {
 	t.is(commaList([0]), '0');
 });
 
-test("jsFromSpecifier['0.19.0']: basic example", t => {
-	t.is(
-		jsFromSpecifier['0.19.0']({
-			author: 'david',
-			pkg: 'weapons',
-			elmParts: ['Sling', 'stone']
-		}),
-		'david$weapons$Sling$stone'
-	);
+test('jsFromSpecifier: basic example', t => {
+	const specifier = {
+		author: 'david',
+		pkg: 'weapons',
+		elmParts: ['Sling', 'stone']
+	};
+	t.is(jsFromSpecifier['0.19.0'](specifier), 'david$weapons$Sling$stone');
+	t.is(jsFromSpecifier['0.19.1'](specifier), '$david$weapons$Sling$stone');
 });
 
-test("jsFromSpecifier['0.19.0']: hyphen in author", t => {
+test('jsFromSpecifier: hyphen in author', t => {
+	const specifier = {
+		author: 'elm-explorations',
+		pkg: 'test',
+		elmParts: ['Test', 'test']
+	};
+	t.is(jsFromSpecifier['0.19.0'](specifier), 'elm_explorations$test$Test$test');
 	t.is(
-		jsFromSpecifier['0.19.0']({
-			author: 'elm-explorations',
-			pkg: 'test',
-			elmParts: ['Test', 'test']
-		}),
-		'elm_explorations$test$Test$test'
+		jsFromSpecifier['0.19.1'](specifier),
+		'$elm_explorations$test$Test$test'
 	);
 });
 
 test("jsFromSpecifier['0.19.0']: hyphen in package", t => {
+	const specifier = {
+		author: 'harrysarson',
+		pkg: 'elm-complex',
+		elmParts: ['Complex', 'add']
+	};
 	t.is(
-		jsFromSpecifier['0.19.0']({
-			author: 'harrysarson',
-			pkg: 'elm-complex',
-			elmParts: ['Complex', 'add']
-		}),
+		jsFromSpecifier['0.19.0'](specifier),
 		'harrysarson$elm_complex$Complex$add'
+	);
+	t.is(
+		jsFromSpecifier['0.19.1'](specifier),
+		'$harrysarson$elm_complex$Complex$add'
 	);
 });
 
@@ -329,18 +335,20 @@ test('detectElmVersion: throws error with `supportedVersion` property if file is
 
 test('trimElmJs: trims 0.19.0', async t => {
 	const file = await fixtures.sources['0.19.0'];
-	const timmed = trimElmJs['0.19.0'](
+	const trimmed = trimElmJs['0.19.0'](
 		file.split('\n').filter(line => line !== '')
 	);
 
-	t.assert(!timmed.includes('use strict'));
-	t.assert(!timmed.includes('_Platform_export'));
+	t.assert(!trimmed.includes('use strict'));
+	t.assert(!trimmed.includes('_Platform_export'));
 });
 
-test.failing('trimElmJs: trims 0.19.1', async t => {
+test('trimElmJs: trims 0.19.1', async t => {
 	const file = await fixtures.sources['0.19.1'];
-	const timmed = trimElmJs['0.19.1'](file.split('\n'));
+	const trimmed = trimElmJs['0.19.1'](
+		file.split('\n').filter(line => line !== '')
+	);
 
-	t.assert(!timmed.contains('use strict'));
-	t.assert(!timmed.contains('_Platform_export'));
+	t.assert(!trimmed.includes('use strict'));
+	t.assert(!trimmed.includes('_Platform_export'));
 });

@@ -25,58 +25,64 @@ export class ElmSpecifier {
 	}
 }
 
-export const trimElmJs = {
-	'0.19.0': lines => {
-		const frontMatter = ['(function(scope){', "'use strict';"];
-		const endMatter = '}(this));';
+function trimElm019help(lines) {
+	const frontMatter = ['(function(scope){', "'use strict';"];
+	const endMatter = '}(this));';
 
-		if (!arraysEqual(lines.slice(0, 2), frontMatter)) {
-			throw new ElmFiltError(
-				`The following start of the elm file is not valid:\n${lines
-					.slice(0, 10)
-					.join('\n')}\n...`
-			);
-		}
-
-		if (!lines[lines.length - 1].endsWith(endMatter)) {
-			throw new ElmFiltError(
-				`The following end to the elm file is not valid:\n...\n${lines
-					.slice(-5)
-					.join('\n')}`
-			);
-		}
-
-		const trimmed = lines.slice(frontMatter.length);
-		trimmed[trimmed.length - 1] = trimmed[trimmed.length - 1].slice(
-			0,
-			-endMatter.length
+	if (!arraysEqual(lines.slice(0, 2), frontMatter)) {
+		throw new ElmFiltError(
+			`The following start of the elm file is not valid:\n${lines
+				.slice(0, 10)
+				.join('\n')}\n...`
 		);
-		return trimmed;
 	}
+
+	if (!lines[lines.length - 1].endsWith(endMatter)) {
+		throw new ElmFiltError(
+			`The following end to the elm file is not valid:\n...\n${lines
+				.slice(-5)
+				.join('\n')}`
+		);
+	}
+
+	const trimmed = lines.slice(frontMatter.length);
+	trimmed[trimmed.length - 1] = trimmed[trimmed.length - 1].slice(
+		0,
+		-endMatter.length
+	);
+	return trimmed;
+}
+
+function definitionsFromElmJs019help(lines) {
+	const definitions = [];
+	const current = lines.slice(0, 1);
+
+	for (let i = 1; i < lines.length; ++i) {
+		const isNewDefinition =
+			lines[i].startsWith('function') ||
+			lines[i].startsWith('var') ||
+			lines[i].startsWith('_Platform_export');
+
+		if (isNewDefinition) {
+			definitions.push(current.join('\n'));
+			current.length = 0;
+		}
+
+		current.push(lines[i]);
+	}
+
+	definitions.push(current.join('\n'));
+	return definitions;
+}
+
+export const trimElmJs = {
+	'0.19.0': trimElm019help,
+	'0.19.1': trimElm019help
 };
 
 export const definitionsFromElmJs = {
-	'0.19.0': lines => {
-		const definitions = [];
-		const current = lines.slice(0, 1);
-
-		for (let i = 1; i < lines.length; ++i) {
-			const isNewDefinition =
-				lines[i].startsWith('function') ||
-				lines[i].startsWith('var') ||
-				lines[i].startsWith('_Platform_export');
-
-			if (isNewDefinition) {
-				definitions.push(current.join('\n'));
-				current.length = 0;
-			}
-
-			current.push(lines[i]);
-		}
-
-		definitions.push(current.join('\n'));
-		return definitions;
-	}
+	'0.19.0': definitionsFromElmJs019help,
+	'0.19.1': definitionsFromElmJs019help,
 };
 
 export function commaList(list) {
@@ -90,7 +96,11 @@ export function commaList(list) {
 
 export const jsFromSpecifier = {
 	'0.19.0': ({author, pkg, elmParts}) =>
-		[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join('$')
+		[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join('$'),
+	'0.19.1': ({author, pkg, elmParts}) =>
+		`$${[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join(
+			'$'
+		)}`
 };
 
 export function parseSpecifier(input) {

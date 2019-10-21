@@ -1,6 +1,6 @@
 {
   "name": "elm-filt",
-  "version": "0.1.0-3",
+  "version": "0.1.0-4",
   "description": "Filter the output of the elm compiler",
   "main": "index.js",
   "engines": {

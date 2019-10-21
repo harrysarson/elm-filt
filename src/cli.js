@@ -132,9 +132,9 @@ The following elm compiler versions are supported:${[
 
 		process.stdout.write(`/* elm-filt ${cli.pkg.version}
  * File:        ${input}.
- * Type:		JavaScript
+ * Type:        JavaScript
  * Compiler:    Offical elm compiler <https://github.com/elm/compiler>
- * Version:		${version}
+ * Version:     ${version}
  *
  * The following elm specifiers have been kept:
  *

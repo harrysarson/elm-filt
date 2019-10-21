@@ -12,7 +12,8 @@
     "lint": "xo",
     "tidy": "xo --fix && ava --updateSnapshots",
     "preversion": "npm run lint && npm test",
-    "version": "ava --updateSnapshots && git add -u"
+    "version": "ava --updateSnapshots && git add -u",
+    "postversion": "git push --tags; git push"
   },
   "repository": {
     "type": "git",

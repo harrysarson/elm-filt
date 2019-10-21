@@ -82,7 +82,7 @@ export const trimElmJs = {
 
 export const definitionsFromElmJs = {
 	'0.19.0': definitionsFromElmJs019help,
-	'0.19.1': definitionsFromElmJs019help,
+	'0.19.1': definitionsFromElmJs019help
 };
 
 export function commaList(list) {

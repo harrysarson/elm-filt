@@ -10,3 +10,10 @@ jobs:
     - script: npm run lint
       name: Lint
       node_js: lts/*
+
+deploy:
+  provider: npm
+  email: "harry.sarson@hotmail.co.uk"
+  api_key: $NPM_TOKEN
+  on:
+    tags: true

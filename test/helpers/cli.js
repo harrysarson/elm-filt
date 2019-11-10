@@ -4,8 +4,12 @@ import util from 'util';
 const elmFilt = './bin/elm-filt';
 const execCmd = util.promisify(childProcess.exec);
 
+export function runElmFilt(argString) {
+	return execCmd(`node ${elmFilt} ${argString}`);
+}
+
 export async function exec(t, argString, func) {
-	const {snapshot} = await func(execCmd(`node ${elmFilt} ${argString}`), t);
+	const {snapshot} = await func(runElmFilt(argString), t);
 
 	if (snapshot !== undefined) {
 		t.snapshot(`elm-filt ${argString}`, {id: `Invocation`});

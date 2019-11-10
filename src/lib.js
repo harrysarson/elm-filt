@@ -76,16 +76,18 @@ export function filter({source, keeps, assumeElmVersion}) {
 		.filter(l => l.contents !== '');
 	const trimmed = trimElmJs[elmVersion](lines);
 	const definitions = definitionsFromElmJs[elmVersion](trimmed);
-	return keeps.reduce((arr, keep) => {
-		const specifier = parseSpecifier(keep);
-		const jsKeep = jsFromSpecifier[elmVersion](specifier);
-		const defs = getDefinitionWithName(definitions, jsKeep);
-		arr.push({
-			elmIdentifier: keep,
-			start: defs[0].number,
-			end: defs[defs.length - 1].number,
-			javascript: defs.map(l => l.contents).join('\n')
-		});
-		return arr;
-	}, []);
+	return keeps
+		.reduce((arr, keep) => {
+			const specifier = parseSpecifier(keep);
+			const jsKeep = jsFromSpecifier[elmVersion](specifier);
+			const defs = getDefinitionWithName(definitions, jsKeep);
+			arr.push({
+				elmIdentifier: keep,
+				start: defs[0].number,
+				end: defs[defs.length - 1].number,
+				javascript: defs.map(l => l.contents).join('\n')
+			});
+			return arr;
+		}, [])
+		.sort((lhs, rhs) => lhs.start - rhs.start);
 }

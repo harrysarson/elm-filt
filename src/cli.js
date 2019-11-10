@@ -138,7 +138,7 @@ The following elm compiler versions are supported:${[
  *
  * The following elm specifiers have been kept:
  *
-${keep.map(k => ` * * \`${k}\``).join('\n')}
+${filtered.map(k => ` * * \`${k.elmIdentifier}\``).join('\n')}
  */
 
 `);

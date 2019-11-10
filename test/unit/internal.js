@@ -336,7 +336,10 @@ test('detectElmVersion: throws error with `supportedVersion` property if file is
 test('trimElmJs: trims 0.19.0', async t => {
 	const file = await fixtures.sources['0.19.0'];
 	const trimmed = trimElmJs['0.19.0'](
-		file.split('\n').filter(line => line !== '')
+		file
+			.split('\n')
+			.map((l, i) => ({number: i, contents: l}))
+			.filter(line => line.contents !== '')
 	);
 
 	t.assert(!trimmed.includes('use strict'));
@@ -346,7 +349,10 @@ test('trimElmJs: trims 0.19.0', async t => {
 test('trimElmJs: trims 0.19.1', async t => {
 	const file = await fixtures.sources['0.19.1'];
 	const trimmed = trimElmJs['0.19.1'](
-		file.split('\n').filter(line => line !== '')
+		file
+			.split('\n')
+			.map((l, i) => ({number: i, contents: l}))
+			.filter(line => line.contents !== '')
 	);
 
 	t.assert(!trimmed.includes('use strict'));

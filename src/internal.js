@@ -29,7 +29,7 @@ function trimElm019help(lines) {
 	const frontMatter = ['(function(scope){', "'use strict';"];
 	const endMatter = '}(this));';
 
-	if (!arraysEqual(lines.slice(0, 2), frontMatter)) {
+	if (!arraysEqual(lines.slice(0, 2).map(l => l.contents), frontMatter)) {
 		throw new ElmFiltError(
 			`The following start of the elm file is not valid:\n${lines
 				.slice(0, 10)
@@ -37,19 +37,19 @@ function trimElm019help(lines) {
 		);
 	}
 
-	if (!lines[lines.length - 1].endsWith(endMatter)) {
+	if (!lines[lines.length - 1].contents.endsWith(endMatter)) {
 		throw new ElmFiltError(
 			`The following end to the elm file is not valid:\n...\n${lines
 				.slice(-5)
+				.map(l => l.contents)
 				.join('\n')}`
 		);
 	}
 
 	const trimmed = lines.slice(frontMatter.length);
-	trimmed[trimmed.length - 1] = trimmed[trimmed.length - 1].slice(
-		0,
-		-endMatter.length
-	);
+	trimmed[trimmed.length - 1].contents = trimmed[
+		trimmed.length - 1
+	].contents.slice(0, -endMatter.length);
 	return trimmed;
 }
 
@@ -59,19 +59,19 @@ function definitionsFromElmJs019help(lines) {
 
 	for (let i = 1; i < lines.length; ++i) {
 		const isNewDefinition =
-			lines[i].startsWith('function') ||
-			lines[i].startsWith('var') ||
-			lines[i].startsWith('_Platform_export');
+			lines[i].contents.startsWith('function') ||
+			lines[i].contents.startsWith('var') ||
+			lines[i].contents.startsWith('_Platform_export');
 
 		if (isNewDefinition) {
-			definitions.push(current.join('\n'));
+			definitions.push(current.slice());
 			current.length = 0;
 		}
 
 		current.push(lines[i]);
 	}
 
-	definitions.push(current.join('\n'));
+	definitions.push(current);
 	return definitions;
 }
 
@@ -246,7 +246,9 @@ function isCaptial(char) {
 
 export function getDefinitionWithName(definitions, name) {
 	const defs = definitions.filter(
-		str => str.startsWith(`var ${name} `) || str.startsWith(`function ${name}(`)
+		str =>
+			str[0].contents.startsWith(`var ${name} `) ||
+			str[0].contents.startsWith(`function ${name}(`)
 	);
 	if (defs.length === 0) {
 		throw new ElmFiltError(`No definitions with name "${name}"`);

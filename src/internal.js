@@ -33,6 +33,7 @@ function trimElm019help(lines) {
 		throw new ElmFiltError(
 			`The following start of the elm file is not valid:\n${lines
 				.slice(0, 10)
+				.map(l => l.contents)
 				.join('\n')}\n...`
 		);
 	}
@@ -94,14 +95,28 @@ export function commaList(list) {
 	return `${list.slice(0, -1).join(', ')} and ${last}`;
 }
 
-export const jsFromSpecifier = {
-	'0.19.0': ({author, pkg, elmParts}) =>
-		[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join('$'),
-	'0.19.1': ({author, pkg, elmParts}) =>
-		`$${[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join(
-			'$'
-		)}`
-};
+export class JsSpecifier {
+	constructor(elm, kernel) {
+		this.elm = elm;
+		this.kernel = kernel;
+		Object.freeze(this);
+	}
+}
+
+export function jsFromSpecifier(elmVersion, {author, pkg, elmParts}) {
+	return {
+		'0.19.0': new JsSpecifier(
+			[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join('$'),
+			`_${elmParts[elmParts.length - 2]}_${elmParts[elmParts.length - 1]}`
+		),
+		'0.19.1': new JsSpecifier(
+			`$${[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join(
+				'$'
+			)}`,
+			`_${elmParts[elmParts.length - 2]}_${elmParts[elmParts.length - 1]}`
+		)
+	}[elmVersion];
+}
 
 export function parseSpecifier(input) {
 	const parts = input.split(':', 2);
@@ -247,14 +262,16 @@ function isCaptial(char) {
 export function getDefinitionWithName(definitions, name) {
 	const defs = definitions.filter(
 		str =>
-			str[0].contents.startsWith(`var ${name} `) ||
-			str[0].contents.startsWith(`function ${name}(`)
+			str[0].contents.startsWith(`var ${name.elm} `) ||
+			str[0].contents.startsWith(`function ${name.elm}(`) ||
+			str[0].contents.startsWith(`var ${name.kernel} `) ||
+			str[0].contents.startsWith(`function ${name.kernel}(`)
 	);
 	if (defs.length === 0) {
-		throw new ElmFiltError(`No definitions with name "${name}"`);
+		throw new ElmFiltError(`No definitions with name "${name.elm}"`);
 	} else if (defs.length > 1) {
 		throw Object.assign(
-			new ElmFiltError(`Multiple definitions with name "${name}"`),
+			new ElmFiltError(`Multiple definitions with name "${name.elm}"`),
 			{
 				definitions: defs
 			}

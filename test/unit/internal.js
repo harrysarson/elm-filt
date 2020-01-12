@@ -9,7 +9,8 @@ import {
 	ParseSpecifierError,
 	trimElmJs,
 	ElmSpecifier,
-	jsFromSpecifier
+	jsFromSpecifier,
+	JsSpecifier
 } from '../../src/internal';
 import {
 	detectElmVersion,
@@ -141,8 +142,8 @@ test('jsFromSpecifier: basic example', t => {
 		pkg: 'weapons',
 		elmParts: ['Sling', 'stone']
 	};
-	t.is(jsFromSpecifier['0.19.0'](specifier), 'david$weapons$Sling$stone');
-	t.is(jsFromSpecifier['0.19.1'](specifier), '$david$weapons$Sling$stone');
+	t.deepEqual(jsFromSpecifier('0.19.0', specifier), new JsSpecifier('david$weapons$Sling$stone', '_Sling_stone'));
+	t.deepEqual(jsFromSpecifier('0.19.1', specifier), new JsSpecifier('$david$weapons$Sling$stone', '_Sling_stone'));
 });
 
 test('jsFromSpecifier: hyphen in author', t => {
@@ -151,26 +152,26 @@ test('jsFromSpecifier: hyphen in author', t => {
 		pkg: 'test',
 		elmParts: ['Test', 'test']
 	};
-	t.is(jsFromSpecifier['0.19.0'](specifier), 'elm_explorations$test$Test$test');
-	t.is(
-		jsFromSpecifier['0.19.1'](specifier),
-		'$elm_explorations$test$Test$test'
+	t.deepEqual(jsFromSpecifier('0.19.0', specifier), new JsSpecifier( 'elm_explorations$test$Test$test', '_Test_test'));
+	t.deepEqual(
+		jsFromSpecifier('0.19.1', specifier), new JsSpecifier(
+		'$elm_explorations$test$Test$test', '_Test_test')
 	);
 });
 
-test("jsFromSpecifier['0.19.0']: hyphen in package", t => {
+test("jsFromSpecifier: hyphen in package", t => {
 	const specifier = {
 		author: 'harrysarson',
 		pkg: 'elm-complex',
 		elmParts: ['Complex', 'add']
 	};
-	t.is(
-		jsFromSpecifier['0.19.0'](specifier),
-		'harrysarson$elm_complex$Complex$add'
+	t.deepEqual(
+		jsFromSpecifier('0.19.0', specifier),
+		new JsSpecifier('harrysarson$elm_complex$Complex$add','_Complex_add')
 	);
-	t.is(
-		jsFromSpecifier['0.19.1'](specifier),
-		'$harrysarson$elm_complex$Complex$add'
+	t.deepEqual(
+		jsFromSpecifier('0.19.1', specifier),
+		new JsSpecifier('$harrysarson$elm_complex$Complex$add','_Complex_add')
 	);
 });
 

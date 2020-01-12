@@ -73,13 +73,14 @@ export function filter({source, keeps, assumeElmVersion}) {
 			number: i,
 			contents: line
 		}))
-		.filter(l => l.contents !== '');
+		.filter(l => l.contents !== '')
+		.filter(l => !/^\S*\/\//.test(l.contents));
 	const trimmed = trimElmJs[elmVersion](lines);
 	const definitions = definitionsFromElmJs[elmVersion](trimmed);
 	return keeps
 		.reduce((arr, keep) => {
 			const specifier = parseSpecifier(keep);
-			const jsKeep = jsFromSpecifier[elmVersion](specifier);
+			const jsKeep = jsFromSpecifier(elmVersion, specifier);
 			const defs = getDefinitionWithName(definitions, jsKeep);
 			arr.push({
 				elmIdentifier: keep,

@@ -104,18 +104,22 @@ export class JsSpecifier {
 }
 
 export function jsFromSpecifier(elmVersion, {author, pkg, elmParts}) {
-	return {
-		'0.19.0': new JsSpecifier(
-			[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join('$'),
-			`_${elmParts[elmParts.length - 2]}_${elmParts[elmParts.length - 1]}`
-		),
-		'0.19.1': new JsSpecifier(
-			`$${[author.replace('-', '_'), pkg.replace('-', '_'), ...elmParts].join(
-				'$'
-			)}`,
-			`_${elmParts[elmParts.length - 2]}_${elmParts[elmParts.length - 1]}`
-		)
-	}[elmVersion];
+	const elmSpecifier = [
+		author.replace('-', '_'),
+		pkg.replace('-', '_'),
+		...elmParts
+	].join('$');
+	const kernelSpecifier = `_${elmParts[elmParts.length - 2]}_${
+		elmParts[elmParts.length - 1]
+	}`;
+	if (elmVersion !== '0.19.0' && elmVersion !== '0.19.1') {
+		throw new Error('Invalid version');
+	}
+
+	return new JsSpecifier(
+		`${elmVersion === '0.19.1' ? '$' : ''}${elmSpecifier}`,
+		kernelSpecifier
+	);
 }
 
 export function parseSpecifier(input) {

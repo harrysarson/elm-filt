@@ -142,8 +142,14 @@ test('jsFromSpecifier: basic example', t => {
 		pkg: 'weapons',
 		elmParts: ['Sling', 'stone']
 	};
-	t.deepEqual(jsFromSpecifier('0.19.0', specifier), new JsSpecifier('david$weapons$Sling$stone', '_Sling_stone'));
-	t.deepEqual(jsFromSpecifier('0.19.1', specifier), new JsSpecifier('$david$weapons$Sling$stone', '_Sling_stone'));
+	t.deepEqual(
+		jsFromSpecifier('0.19.0', specifier),
+		new JsSpecifier('david$weapons$Sling$stone', '_Sling_stone')
+	);
+	t.deepEqual(
+		jsFromSpecifier('0.19.1', specifier),
+		new JsSpecifier('$david$weapons$Sling$stone', '_Sling_stone')
+	);
 });
 
 test('jsFromSpecifier: hyphen in author', t => {
@@ -152,14 +158,17 @@ test('jsFromSpecifier: hyphen in author', t => {
 		pkg: 'test',
 		elmParts: ['Test', 'test']
 	};
-	t.deepEqual(jsFromSpecifier('0.19.0', specifier), new JsSpecifier( 'elm_explorations$test$Test$test', '_Test_test'));
 	t.deepEqual(
-		jsFromSpecifier('0.19.1', specifier), new JsSpecifier(
-		'$elm_explorations$test$Test$test', '_Test_test')
+		jsFromSpecifier('0.19.0', specifier),
+		new JsSpecifier('elm_explorations$test$Test$test', '_Test_test')
+	);
+	t.deepEqual(
+		jsFromSpecifier('0.19.1', specifier),
+		new JsSpecifier('$elm_explorations$test$Test$test', '_Test_test')
 	);
 });
 
-test("jsFromSpecifier: hyphen in package", t => {
+test('jsFromSpecifier: hyphen in package', t => {
 	const specifier = {
 		author: 'harrysarson',
 		pkg: 'elm-complex',
@@ -167,11 +176,11 @@ test("jsFromSpecifier: hyphen in package", t => {
 	};
 	t.deepEqual(
 		jsFromSpecifier('0.19.0', specifier),
-		new JsSpecifier('harrysarson$elm_complex$Complex$add','_Complex_add')
+		new JsSpecifier('harrysarson$elm_complex$Complex$add', '_Complex_add')
 	);
 	t.deepEqual(
 		jsFromSpecifier('0.19.1', specifier),
-		new JsSpecifier('$harrysarson$elm_complex$Complex$add','_Complex_add')
+		new JsSpecifier('$harrysarson$elm_complex$Complex$add', '_Complex_add')
 	);
 });
 
